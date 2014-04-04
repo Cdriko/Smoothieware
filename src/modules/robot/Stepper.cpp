@@ -5,6 +5,10 @@
       You should have received a copy of the GNU General Public License along with Smoothie. If not, see <http://www.gnu.org/licenses/>.
 */
 
+//only for debug
+#include "StreamOutputPool.h"
+
+
 #include "Stepper.h"
 
 #include "libs/Module.h"
@@ -175,6 +179,7 @@ void Stepper::on_block_begin(void* argument){
 // Current block is discarded
 void Stepper::on_block_end(void* argument){
     this->current_block = NULL; //stfu !
+    THEKERNEL->streams->printf("End of Block!!!\r\n");
 }
 
 // When a stepper motor has finished it's assigned movement

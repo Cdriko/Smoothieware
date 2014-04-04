@@ -608,18 +608,23 @@ uint32_t Endstops::check_runtime(uint32_t dummy){
 	//do nothing during homing
 	if(!(this->status = NOT_HOMING)){
 		for ( char c = 'X'; c <= 'Z'; c++ ) {
-			if(this->pins[c - 'X'].get()==0){
+			if(this->pins[c - 'X'].get()==0){//min endstops
 			//one endstop is activated
-			//s->printf("Cycle ");
+			THEKERNEL->streams->printf("Min endstop  %d  activated without a mouvement \r\n", c - 'X');
+			THEKERNEL->streams->printf("Motor moving:  %d  Direction: %d \r\n", this->steppers[c - 'X']->moving,this->steppers[c - 'X']->direction);
 			
-			//THEKERNEL->streams->printf("gling gling !\r\n");
-			//THEKERNEL->streams->printf("ERROR: Not enough room for value\r\n");
-			THEKERNEL->streams->printf("endstop  %d  activated \r\n", c - 'X');
-         
+			if((this->steppers[c - 'X']->direction==0)&&(this->steppers[c - 'X']->moving )){
+			//end block
+		        THEKERNEL->call_event(ON_BLOCK_END,this);
+		        
+				THEKERNEL->streams->printf("Min endstop  %d  activated during a mouvement \r\n", c - 'X');
+			}
 			
 			}
              if ( this->steppers[c - 'X']->moving ) {
-                        //this->steppers[c - 'X']->move(0, 0);
+				 
+				  //this->steppers[c - 'X']->direction
+                        
                     }
                 
              

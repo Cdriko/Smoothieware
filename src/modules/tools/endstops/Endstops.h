@@ -22,6 +22,7 @@ class Endstops : public Module{
         void on_gcode_received(void* argument);
         void on_config_reload(void* argument);
         uint32_t acceleration_tick(uint32_t dummy);
+        uint32_t check_runtime(uint32_t dummy);
 
     private:
         void do_homing(char axes_to_move);
@@ -30,6 +31,7 @@ class Endstops : public Module{
         void wait_for_homed_corexy(int axis);
         void corexy_home(int home_axis, bool dirx, bool diry, float fast_rate, float slow_rate, unsigned int retract_steps);
         void trim2mm(float * mm);
+        
 
         float steps_per_mm[3];
         float homing_position[3];

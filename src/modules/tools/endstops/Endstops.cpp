@@ -101,6 +101,8 @@ Endstops::Endstops()
 {
     this->status = NOT_HOMING;
     home_offset[0] = home_offset[1] = home_offset[2] = 0.0F;
+    //runtime endstop
+    THEKERNEL->slow_ticker->attach( 100, this, &Endstops::check_runtime );
 }
 
 void Endstops::on_module_loaded()
@@ -596,4 +598,33 @@ uint32_t Endstops::acceleration_tick(uint32_t dummy)
     }
 
     return 0;
+}
+
+
+//called everyTime (by slow_ticker)
+uint32_t Endstops::check_runtime(uint32_t dummy){
+
+	//do nothing during homing
+	if(!(this->status = NOT_HOMING)){
+		for ( char c = 'X'; c <= 'Z'; c++ ) {
+			if(this->pins[c - 'X'].get()){
+			//one endstop is activated
+			//s->printf("Cycle ");
+			
+			//THEKERNEL->streams->printf("gling gling !\r\n");
+			THEKERNEL->streams->printf("ERROR: Not enough room for value\r\n");
+			//THEKERNEL->streams->printf("X %s:%d  pin : %d \r\n", "runtime endstop", this->pins[c - 'X'].get(), c);
+         
+			
+			}
+             if ( this->steppers[c - 'X']->moving ) {
+                        //this->steppers[c - 'X']->move(0, 0);
+                    }
+                
+             
+        }
+		
+	}
+	
+	return 0;
 }

@@ -8,6 +8,7 @@
 #include "libs/Module.h"
 #include "libs/Kernel.h"
 #include "modules/communication/utils/Gcode.h"
+#include "StreamOutputPool.h"
 #include "modules/robot/Conveyor.h"
 #include "Endstops.h"
 #include "libs/nuts_bolts.h"
@@ -607,13 +608,13 @@ uint32_t Endstops::check_runtime(uint32_t dummy){
 	//do nothing during homing
 	if(!(this->status = NOT_HOMING)){
 		for ( char c = 'X'; c <= 'Z'; c++ ) {
-			if(this->pins[c - 'X'].get()){
+			if(this->pins[c - 'X'].get()==0){
 			//one endstop is activated
 			//s->printf("Cycle ");
 			
 			//THEKERNEL->streams->printf("gling gling !\r\n");
-			THEKERNEL->streams->printf("ERROR: Not enough room for value\r\n");
-			//THEKERNEL->streams->printf("X %s:%d  pin : %d \r\n", "runtime endstop", this->pins[c - 'X'].get(), c);
+			//THEKERNEL->streams->printf("ERROR: Not enough room for value\r\n");
+			THEKERNEL->streams->printf("endstop  %d  activated \r\n", c - 'X');
          
 			
 			}
